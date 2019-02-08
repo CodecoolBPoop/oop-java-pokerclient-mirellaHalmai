@@ -43,21 +43,6 @@ public class Card {
     }
 
     public int getValue() {
-        HashMap<String, Integer> alphabeticCardValue = new HashMap<>();
-        alphabeticCardValue.put("J", 11);
-        alphabeticCardValue.put("Q", 12);
-        alphabeticCardValue.put("K", 13);
-        alphabeticCardValue.put("A", 14);
-
-        String cardValue = cardCode.substring(1).toUpperCase();
-        Integer intCardValue;
-
-        if (alphabeticCardValue.get(cardCode.substring(1).toUpperCase()) == null) {
-            intCardValue = Integer.parseInt(cardValue);
-        } else {
-            intCardValue = alphabeticCardValue.get(cardCode.substring(1).toUpperCase());
-        }
-
-        return intCardValue;
+        return CARD_RANKS.get(cardRank);
     }
 }
