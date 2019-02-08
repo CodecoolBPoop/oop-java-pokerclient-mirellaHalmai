@@ -22,21 +22,21 @@ public class Card {
             new AbstractMap.SimpleImmutableEntry<>("Q", 12),
             new AbstractMap.SimpleImmutableEntry<>("K", 13),
             new AbstractMap.SimpleImmutableEntry<>("A", 14))
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));;
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
     public Card(String cardCode) throws IllegalArgumentException {
 
         String cardSuit = cardCode.substring(0, 1).toUpperCase();
 
-        if (! CARD_SUITS.contains(cardSuit)) {
+        if (!CARD_SUITS.contains(cardSuit)) {
             throw new IllegalArgumentException("card color isn't valid: " + cardSuit);
         }
 
         String cardRank = cardCode.substring(1).toUpperCase();
 
-        if (! CARD_RANKS.containsKey(cardRank)) {
-                throw new IllegalArgumentException("card number isn't valid: " + cardRank);
-            }
+        if (!CARD_RANKS.containsKey(cardRank)) {
+            throw new IllegalArgumentException("card number isn't valid: " + cardRank);
+        }
         this.cardCode = cardCode;
         this.cardSuit = cardSuit;
         this.cardRank = cardRank;
