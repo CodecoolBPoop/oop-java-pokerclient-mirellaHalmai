@@ -1,54 +1,37 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PokerClient {
 
-    public Card card1;
-    public Card card2;
-    public Card card3;
-    public Card card4;
-    public Card card5;
+    List<Card> cards;
 
-    public PokerClient(String p1, String p2, String p3, String p4, String p5) {
-        this.card1 = new Card(p1.toUpperCase());
-        this.card2 = new Card(p2.toUpperCase());
-        this.card3 = new Card(p3.toUpperCase());
-        this.card4 = new Card(p4.toUpperCase());
-        this.card5 = new Card(p5.toUpperCase());
+    public PokerClient(String card1, String card2, String card3, String card4, String card5) {
+        cards = getCardList(card1, card2, card3, card4, card5);
     }
 
-    public boolean highestCardIsMine(String p1, String p2, String p3, String p4, String p5) {
-        Card hc = new Card("s2");
-        List<Card> o = new ArrayList<Card>();
-        List<Card> m = new ArrayList<Card>();
-        o.add(new Card(p1.toUpperCase()));
-        o.add(new Card(p2.toUpperCase()));
-        o.add(new Card(p3.toUpperCase()));
-        o.add(new Card(p4.toUpperCase()));
-        o.add(new Card(p5.toUpperCase()));
-        m.add(card1);
-        m.add(card2);
-        m.add(card3);
-        m.add(card4);
-        m.add(card5);
+    public boolean highestCardIsMine(String otherCard1, String otherCard2, String otherCard3, String otherCard4, String otherCard5) {
+        List<Card> otherCards = getCardList(otherCard1, otherCard2, otherCard3, otherCard4, otherCard5);
 
-        for (int i = 0; i < o.size(); i++) {
-            Card mc = m.get(i);
-            for (int j = 0; j < o.size(); j++) {
-                Card oc = o.get(j);
-                if (oc.getValue() >= mc.getValue()) {
-                    if (oc.getValue() >= hc.getValue()) {
-                        hc = oc;
-                    }
-                } else {
-                    if (mc.getValue() > hc.getValue()) {
-                        hc = mc;
-                    }
-                }
-            }
-        }
+        int highestOwnCard = getHighestValueFromCardList(cards);
+        int highestOtherCard = getHighestValueFromCardList(otherCards);
 
-        return m.contains(hc);
+        return highestOwnCard > highestOtherCard;
+    }
+
+    private int getHighestValueFromCardList(List<Card> cards) {
+        return cards.stream()
+                .mapToInt(Card::getValue)
+                .max()
+                .getAsInt();
+    }
+
+    private List<Card> getCardList(String card1, String card2, String card3, String card4, String card5) {
+        return Stream.of(card1, card2, card3, card4, card5)
+                .map(Card::new)
+                .collect(Collectors.toList());
     }
 
 }
