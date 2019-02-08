@@ -1,42 +1,45 @@
-import java.util.HashMap;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Card {
 
     String cardCode;
+    private String cardSuit;
+    private String cardRank;
+    private static final List<String> CARD_SUITS = Arrays.asList("S", "C", "D", "H");
+    private static final Map<String, Integer> CARD_RANKS = Stream.of(
+            new AbstractMap.SimpleImmutableEntry<>("2", 2),
+            new AbstractMap.SimpleImmutableEntry<>("3", 3),
+            new AbstractMap.SimpleImmutableEntry<>("4", 4),
+            new AbstractMap.SimpleImmutableEntry<>("5", 5),
+            new AbstractMap.SimpleImmutableEntry<>("6", 6),
+            new AbstractMap.SimpleImmutableEntry<>("7", 7),
+            new AbstractMap.SimpleImmutableEntry<>("8", 8),
+            new AbstractMap.SimpleImmutableEntry<>("9", 9),
+            new AbstractMap.SimpleImmutableEntry<>("10", 10),
+            new AbstractMap.SimpleImmutableEntry<>("J", 11),
+            new AbstractMap.SimpleImmutableEntry<>("Q", 12),
+            new AbstractMap.SimpleImmutableEntry<>("K", 13),
+            new AbstractMap.SimpleImmutableEntry<>("A", 14))
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));;
 
     public Card(String cardCode) throws IllegalArgumentException {
+
+        String cardSuit = cardCode.substring(0, 1).toUpperCase();
+
+        if (! CARD_SUITS.contains(cardSuit)) {
+            throw new IllegalArgumentException("card color isn't valid: " + cardSuit);
+        }
+
+        String cardRank = cardCode.substring(1).toUpperCase();
+
+        if (! CARD_RANKS.containsKey(cardRank)) {
+                throw new IllegalArgumentException("card number isn't valid: " + cardRank);
+            }
         this.cardCode = cardCode;
-
-        String cardColor = this.cardCode.substring(0, 1).toUpperCase();
-
-        if (!cardColor.contentEquals("S") &&
-            !cardColor.contentEquals("C") &&
-            !cardColor.contentEquals("D") &&
-            !cardColor.contentEquals("H"))
-        {
-            throw new IllegalArgumentException("card color isn't valid: " + cardColor);
-        }
-
-        String cardValue = cardCode.substring(1).toUpperCase();
-        Integer intCardValue;
-
-        HashMap<String, Integer> alphabeticCardValue = new HashMap<>();
-        alphabeticCardValue.put("J", 11);
-        alphabeticCardValue.put("Q", 12);
-        alphabeticCardValue.put("K", 13);
-        alphabeticCardValue.put("A", 14);
-
-        if (alphabeticCardValue.get(cardCode.substring(1).toUpperCase()) == null) {
-            // raises exception if cardValue is a letter, but not J/Q/K/A
-            intCardValue = Integer.parseInt(cardValue);
-            if (intCardValue > 10) {
-                throw new IllegalArgumentException("card number isn't valid: " + intCardValue);
-            }
-            if (intCardValue < 2) {
-                throw new IllegalArgumentException("card number isn't valid: " + intCardValue);
-            }
-
-        }
+        this.cardSuit = cardSuit;
+        this.cardRank = cardRank;
     }
 
     public int getValue() {
